@@ -17,3 +17,7 @@
 ![alt text](docs/image-1.png)
 
 * 把一些使用索引的做了负值保护。例如，输入-1改为可选的最后一个目标。
+
+## 依赖
+
+[TinyPinyin](https://github.com/hstarorg/TinyPinyin.Net)
