@@ -1,0 +1,11 @@
+# Godot
+.godot/
+/android/
+addons/
+
+# Visual Studio Code
+.vscode/
+bin/
+obj/
+local.props
+.ci/

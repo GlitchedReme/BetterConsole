@@ -1,0 +1,78 @@
+<Project Sdk="Godot.NET.Sdk/4.5.1">
+  <Import Project="local.props" Condition="Exists('local.props')" />
+
+  <PropertyGroup Label="Project">
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>BetterConsole</AssemblyName>
+    <RootNamespace>BetterConsole</RootNamespace>
+    <LangVersion>13.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Metadata">
+    <Title>Better Console</Title>
+    <Product>Better Console</Product>
+    <Authors>Reme</Authors>
+    <Description>A better console for Slay the Spire 2.</Description>
+    <!-- Keep version in sync with BetterConsole.json when publishing. -->
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Paths">
+    <DefaultItemExcludes>$(DefaultItemExcludes);packages/**</DefaultItemExcludes>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <Sts2Dir Condition="'$(Sts2Dir)' == '' and '$(Sts2Path)' != ''">$(Sts2Path)</Sts2Dir>
+    <GodotExe Condition="'$(GodotExe)' == '' and '$(GodotPath)' != ''">$(GodotPath)</GodotExe>
+    <Sts2DataDir Condition="'$(Sts2DataDir)' == '' and '$(Sts2Dir)' != ''">$(Sts2Dir)/data_sts2_windows_x86_64</Sts2DataDir>
+    <UseLocalSts2References Condition="'$(UseLocalSts2References)' == '' and Exists('$(Sts2DataDir)/sts2.dll') and Exists('$(Sts2DataDir)/0Harmony.dll')">true</UseLocalSts2References>
+    <UseLocalSts2References Condition="'$(UseLocalSts2References)' == ''">false</UseLocalSts2References>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Debug" Condition="'$(Configuration)' == 'Debug'">
+    <Optimize>false</Optimize>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Release" Condition="'$(Configuration)' == 'Release'">
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PathMap>$(AppOutputBase)=.\</PathMap>
+  </PropertyGroup>
+
+  <ItemGroup Label="Local STS2 References" Condition="'$(UseLocalSts2References)' == 'true'">
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="0Harmony">
+      <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Label="Package References">
+    <PackageReference Include="FuYnAloft.Sts2.References" Version="0.106.1-beta" PrivateAssets="all" ExcludeAssets="runtime" Condition="'$(UseLocalSts2References)' != 'true'" />
+    <PackageReference Include="TinyPinyin" Version="1.1.0" GeneratePathProperty="true" />
+  </ItemGroup>
+
+  <Target Name="CopyMod" AfterTargets="Build" Condition="'$(Sts2Dir)' != ''">
+    <Message Text="Copying mod to Slay the Spire 2 mods folder..." Importance="high" />
+    <MakeDir Directories="$(Sts2Dir)/mods/$(MSBuildProjectName)/" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/" />
+    <Copy SourceFiles="$(PkgTinyPinyin)\lib\net6.0\TinyPinyin.dll" DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/" SkipUnchangedFiles="true"
+      Condition="Exists('$(PkgTinyPinyin)\lib\net6.0\TinyPinyin.dll')" />
+    <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/" />
+  </Target>
+
+  <Target Name="ExportPck">
+    <Message Text="Copying PCK to Slay the Spire 2 mods folder..." Importance="high" />
+    <Exec Command="&quot;$(GodotExe)&quot; --headless --export-pack &quot;Windows Desktop&quot; &quot;$(Sts2Dir)/mods/$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+      EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
+      ContinueOnError="WarnAndContinue" />
+  </Target>
+</Project>

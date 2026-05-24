@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Build
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          dotnet build BetterConsole.csproj -c Release -nologo `
+            -p:Sts2Dir="$PWD/.ci/sts2"
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $modDir = Join-Path $PWD ".ci/sts2/mods/BetterConsole"
+          if (!(Test-Path $modDir)) {
+            throw "Mod output was not copied to $modDir."
+          }
+
+          $manifest = Get-Content "BetterConsole.json" -Raw | ConvertFrom-Json
+          $version = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart("v") } else { $manifest.version }
+          $zipPath = Join-Path $PWD "BetterConsole-$version.zip"
+
+          if (Test-Path $zipPath) {
+            Remove-Item -LiteralPath $zipPath -Force
+          }
+
+          Compress-Archive -Path (Join-Path $modDir "*") -DestinationPath $zipPath
+          "ZIP_PATH=$zipPath" >> $env:GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BetterConsole
+          path: ${{ env.ZIP_PATH }}
+
+      - name: Publish GitHub Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_PATH }}
+          generate_release_notes: true
