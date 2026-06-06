@@ -25,9 +25,9 @@ public class Entry
 
         RitsuLibFramework.RegisterModUpdateCheck(new()
         {
-            ModId = "your-mod-id",
-            DisplayName = "Your Mod",
-            CurrentVersion = "1.0.0",
+            ModId = "BetterConsole",
+            DisplayName = "更好的控制台",
+            CurrentVersion = "0.1.1",
             ManifestUri = new("https://glitchedreme.github.io/BetterConsole/update.json"),
             ReleasePageUri = new("https://github.com/GlitchedReme/BetterConsole/releases"),
         });
