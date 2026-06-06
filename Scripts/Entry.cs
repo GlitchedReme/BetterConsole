@@ -27,7 +27,7 @@ public class Entry
         {
             ModId = "BetterConsole",
             DisplayName = "更好的控制台",
-            CurrentVersion = "0.1.1",
+            CurrentVersion = "0.1.2",
             ManifestUri = new("https://glitchedreme.github.io/BetterConsole/update.json"),
             ReleasePageUri = new("https://github.com/GlitchedReme/BetterConsole/releases"),
         });

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
 const templatePath = resolve(repoRoot, 'update.template.json')
-const modManifestPath = resolve(repoRoot, 'mod_manifest.json')
+const modManifestPath = resolve(repoRoot, 'BetterConsole.json')
 const outputPath = resolve(repoRoot, 'public', 'update.json')
 
 const [templateText, modManifestText] = await Promise.all([
