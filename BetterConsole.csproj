@@ -2,7 +2,7 @@
   <Import Project="local.props" Condition="Exists('local.props')" />
 
   <PropertyGroup Label="Project">
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>BetterConsole</AssemblyName>
     <RootNamespace>BetterConsole</RootNamespace>
     <LangVersion>13.0</LangVersion>
@@ -30,6 +30,7 @@
     <Sts2DataDir Condition="'$(Sts2DataDir)' == '' and '$(Sts2Dir)' != ''">$(Sts2Dir)/data_sts2_windows_x86_64</Sts2DataDir>
     <UseLocalSts2References Condition="'$(UseLocalSts2References)' == '' and Exists('$(Sts2DataDir)/sts2.dll') and Exists('$(Sts2DataDir)/0Harmony.dll')">true</UseLocalSts2References>
     <UseLocalSts2References Condition="'$(UseLocalSts2References)' == ''">false</UseLocalSts2References>
+    <RitsuLibDeployDir>$(Sts2Dir)/mods/STS2-RitsuLib/</RitsuLibDeployDir>
   </PropertyGroup>
 
   <PropertyGroup Label="Debug" Condition="'$(Configuration)' == 'Debug'">
@@ -56,7 +57,8 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="FuYnAloft.Sts2.References" Version="0.106.1-beta" PrivateAssets="all" ExcludeAssets="runtime" Condition="'$(UseLocalSts2References)' != 'true'" />
+    <PackageReference Include="FuYnAloft.Sts2.References" Version="*" PrivateAssets="all" ExcludeAssets="runtime" Condition="'$(UseLocalSts2References)' != 'true'" />
+    <PackageReference Include="STS2.RitsuLib" Version="*" />
     <PackageReference Include="TinyPinyin" Version="1.1.0" GeneratePathProperty="true" />
   </ItemGroup>
 

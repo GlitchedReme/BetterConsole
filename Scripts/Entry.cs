@@ -1,6 +1,7 @@
 using Godot.Bridge;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
+using STS2RitsuLib;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -21,6 +22,15 @@ public class Entry
         harmony.PatchAll();
 
         ScriptManagerBridge.LookupScriptsInAssembly(typeof(Entry).Assembly);
+
+        RitsuLibFramework.RegisterModUpdateCheck(new()
+        {
+            ModId = "your-mod-id",
+            DisplayName = "Your Mod",
+            CurrentVersion = "1.0.0",
+            ManifestUri = new("https://glitchedreme.github.io/BetterConsole/update.json"),
+            ReleasePageUri = new("https://github.com/GlitchedReme/BetterConsole/releases"),
+        });
     }
 
     private static void RegisterAssemblyResolver()

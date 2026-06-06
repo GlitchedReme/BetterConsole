@@ -121,7 +121,7 @@ public class ConsoleGrammaPatch
     private static CmdResult ExecuteOrEnqueue(DevConsole console, Dictionary<string, AbstractConsoleCmd> commands, Player? issuingPlayer, string inputValue)
     {
         var cmdName = inputValue.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.ToLowerInvariant() ?? "";
-        if (!RunManager.Instance.IsSinglePlayerOrFakeMultiplayer && commands.TryGetValue(cmdName, out var command) && command.IsNetworked && issuingPlayer != null)
+        if (!RunManager.Instance.IsSingleplayerOrFakeMultiplayer && commands.TryGetValue(cmdName, out var command) && command.IsNetworked && issuingPlayer != null)
         {
             RunManager.Instance.ActionQueueSynchronizer.RequestEnqueue(new ConsoleCmdGameAction(issuingPlayer, inputValue, CombatManager.Instance.IsInProgress));
             return new CmdResult(success: true, $"Enqueued {cmdName} command: '{inputValue}'");
