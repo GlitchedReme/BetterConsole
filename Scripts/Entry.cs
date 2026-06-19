@@ -1,7 +1,6 @@
 using Godot.Bridge;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
-using STS2RitsuLib;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -23,14 +22,14 @@ public class Entry
 
         ScriptManagerBridge.LookupScriptsInAssembly(typeof(Entry).Assembly);
 
-        RitsuLibFramework.RegisterModUpdateCheck(new()
-        {
-            ModId = "BetterConsole",
-            DisplayName = "更好的控制台",
-            CurrentVersion = "0.1.2",
-            ManifestUri = new("https://glitchedreme.github.io/BetterConsole/update.json"),
-            ReleasePageUri = new("https://github.com/GlitchedReme/BetterConsole/releases"),
-        });
+        // RitsuLibFramework.RegisterModUpdateCheck(new()
+        // {
+        //     ModId = "BetterConsole",
+        //     DisplayName = "更好的控制台",
+        //     CurrentVersion = "0.1.2",
+        //     ManifestUri = new("https://glitchedreme.github.io/BetterConsole/update.json"),
+        //     ReleasePageUri = new("https://github.com/GlitchedReme/BetterConsole/releases"),
+        // });
     }
 
     private static void RegisterAssemblyResolver()
